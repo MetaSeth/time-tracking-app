@@ -1,7 +1,7 @@
 import { Firestore, addDoc, query, where } from 'firebase/firestore'
 import { getDocs, collection } from 'firebase/firestore'
 import TimeEntry from '../interfaces/TimeEntry'
-import { userIsAdmin } from '../services/UserService'
+import { userIsAdmin } from './UserService'
 
 export async function getTimeEntries(
     firestore: Firestore,
