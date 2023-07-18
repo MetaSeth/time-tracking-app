@@ -9,10 +9,10 @@ let db = admin.firestore();
 
 // Users collection
 let users = [
-  { id: "admin", name: "Admin", role: "admin" },
-  { id: "user1", name: "User One", role: "user" },
-  { id: "user2", name: "User Two", role: "user" },
-  { id: "user3", name: "User Three", role: "user" },
+  { id: "admin", name: "Admin", role: "admin", admin: true },
+  { id: "user1", name: "User One", role: "user", admin: false },
+  { id: "user2", name: "User Two", role: "user", admin: false },
+  { id: "user3", name: "User Three", role: "user", admin: false },
 ];
 
 users.forEach((user) => {
