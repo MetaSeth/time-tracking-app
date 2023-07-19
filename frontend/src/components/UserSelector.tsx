@@ -38,7 +38,7 @@ const UserSelector: React.FC = () => {
 
     return (
         <Select
-            placeholder="Select a user"
+            placeholder="Connect as..."
             onChange={handleChange}
             defaultActiveFirstOption={true}
         >
