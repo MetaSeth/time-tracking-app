@@ -8,7 +8,7 @@ The Time Tracking Application enables users to report their time entries, specif
 
 
 ## Live Demo
-Check out the live demo of the Time Tracking Application[here](https://time-tracking-app-7d901.web.app/).
+Check out the live demo of the Time Tracking Application [here](https://time-tracking-app-7d901.web.app/).
 
 Please note that this demo showcases the application's functionality, but the data is for demonstration purposes only and may not reflect real-world scenarios.
 ## Features
