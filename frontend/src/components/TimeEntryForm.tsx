@@ -15,7 +15,7 @@ import Project from '../interfaces/Project'
 import Task from '../interfaces/Task'
 import { getProjects } from '../services/ProjectService'
 import { getTasks } from '../services/TaskService'
-import { addTimeEntry } from '../services/TimeEntryService'
+import { addTimeEntry } from '../services/timeEntryService'
 
 const TimeEntryForm = () => {
     const [form] = Form.useForm()
@@ -23,7 +23,7 @@ const TimeEntryForm = () => {
     const currentUser = userContext?.user || null
     const [tasks, setTasks] = useState<Task[]>([])
     const [projects, setProjects] = useState<Project[]>([])
-    const projectValue = Form.useWatch('projectId', form)
+    const projectValue = Form.useWatch<string>('projectId', form)
 
     const layout = {
         labelCol: {

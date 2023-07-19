@@ -20,7 +20,7 @@ const ProjectList: React.FC = () => {
             setProjects(fetchedProjects)
         }
 
-        fetchProjects()
+        void fetchProjects()
     }, [])
 
     return (
