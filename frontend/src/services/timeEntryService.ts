@@ -1,13 +1,12 @@
-import { Firestore, addDoc, query, where } from 'firebase/firestore'
-import { getDocs, collection } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { getFirestoreInstance } from '../firebase'
 import TimeEntry from '../interfaces/TimeEntry'
 import { userIsAdmin } from './UserService'
 
-export async function getTimeEntries(
-    firestore: Firestore,
-    userId: string
-): Promise<TimeEntry[]> {
-    const isAdmin = await userIsAdmin(firestore, userId)
+const firestore = getFirestoreInstance()
+
+export async function getTimeEntries(userId: string): Promise<TimeEntry[]> {
+    const isAdmin = await userIsAdmin(userId)
     if (isAdmin) {
         const timeEntriesCollection = collection(firestore, 'timeEntries')
         const timeEntriesSnapshot = await getDocs(timeEntriesCollection)
@@ -21,32 +20,26 @@ export async function getTimeEntries(
     }
 }
 
-export async function getTimeEntriesByTask(
-    firestore: Firestore,
-    userId: string,
-    taskId: string
-) {
-    const timeEntries = await getTimeEntries(firestore, userId)
+export async function getTimeEntriesByTask(userId: string, taskId: string) {
+    const timeEntries = await getTimeEntries(userId)
     return timeEntries.filter((timeEntry) => timeEntry.taskId === taskId)
 }
 
 export async function getTimeEntriesByProject(
-    firestore: Firestore,
     userId: string,
     projectId: string
 ) {
-    const timeEntries = await getTimeEntries(firestore, userId)
+    const timeEntries = await getTimeEntries(userId)
     return timeEntries.filter((timeEntry) => timeEntry.projectId === projectId)
 }
 
 export async function getTimeEntriesByPeriod(
-    firestore: Firestore,
     startDate: Date,
     endDate: Date,
     userId: string
 ): Promise<TimeEntry[]> {
     const timeEntriesCollection = collection(firestore, 'timeEntries')
-    const isAdmin = await userIsAdmin(firestore, userId)
+    const isAdmin = await userIsAdmin(userId)
 
     let timeEntryQuery
     if (isAdmin) {
@@ -76,10 +69,7 @@ export async function getTimeEntriesByPeriod(
     return timeEntries
 }
 
-export async function addTimeEntry(
-    timeEntry: TimeEntry,
-    firestore: Firestore
-): Promise<void> {
+export async function addTimeEntry(timeEntry: TimeEntry): Promise<void> {
     const timeEntriesCollection = collection(firestore, 'timeEntries')
     await addDoc(timeEntriesCollection, timeEntry)
 }

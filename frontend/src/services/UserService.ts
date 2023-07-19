@@ -1,37 +1,16 @@
 import User from '../interfaces/User'
-import { firestore } from '../firebase'
-import { Firestore, collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
+import { getFirestoreInstance } from '../firebase'
 
-// export const getUsers = async (): Promise<User[]> => {
-//     const users: User[] = []
+const firestore = getFirestoreInstance()
 
-//     try {
-//         const userCollection = collection(firestore, 'users')
-//         const snapshot = await getDocs(userCollection)
-//         snapshot.forEach((doc) => {
-//             const data = doc.data()
-//             users.push({
-//                 id: doc.id,
-//                 name: data.name,
-//             } as User)
-//         })
-//     } catch (error) {
-//         console.error('Error fetching users: ', error)
-//     }
-
-//     return users
-// }
-
-export async function getUsers(firestore: Firestore): Promise<User[]> {
+export async function getUsers(): Promise<User[]> {
     const usersCollection = collection(firestore, 'users')
     const usersSnapshot = await getDocs(usersCollection)
     return usersSnapshot.docs.map((doc) => doc.data() as User)
 }
 
-export async function userIsAdmin(
-    firestore: Firestore,
-    userId: string
-): Promise<boolean> {
+export async function userIsAdmin(userId: string): Promise<boolean> {
     const usersCollection = collection(firestore, 'users')
     const usersSnapshot = await getDocs(usersCollection)
     const user = usersSnapshot.docs

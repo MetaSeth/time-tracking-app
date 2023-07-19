@@ -10,12 +10,12 @@ import {
 import { Timestamp } from 'firebase/firestore'
 import { useContext, useEffect, useState } from 'react'
 import UserContext from '../context/UserContext'
-import { firestore } from '../firebase'
+import { getFirestoreInstance } from '../firebase'
 import Project from '../interfaces/Project'
 import Task from '../interfaces/Task'
 import { getProjects } from '../services/ProjectService'
 import { getTasks } from '../services/TaskService'
-import { addTimeEntry } from '../services/TimeEntryService'
+import { addTimeEntry } from '../services/timeEntryService'
 
 const TimeEntryForm = () => {
     const [form] = Form.useForm()
@@ -24,6 +24,8 @@ const TimeEntryForm = () => {
     const [tasks, setTasks] = useState<Task[]>([])
     const [projects, setProjects] = useState<Project[]>([])
     const projectValue = Form.useWatch('projectId', form)
+
+    const firestore = getFirestoreInstance()
 
     const layout = {
         labelCol: {
@@ -38,8 +40,8 @@ const TimeEntryForm = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedTasks = await getTasks(firestore)
-            const fetchedProjects = await getProjects(firestore)
+            const fetchedTasks = await getTasks()
+            const fetchedProjects = await getProjects()
             setTasks(fetchedTasks)
             setProjects(fetchedProjects)
         }
@@ -52,7 +54,7 @@ const TimeEntryForm = () => {
             date: Timestamp.fromDate(values.date.toDate()),
             userId: currentUser?.id,
         }
-        await addTimeEntry(formattedValues, firestore)
+        await addTimeEntry(formattedValues)
         form.resetFields()
     }
 

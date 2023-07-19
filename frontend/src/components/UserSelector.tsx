@@ -3,7 +3,6 @@ import { Select } from 'antd'
 import UserContext from '../context/UserContext'
 import { getUsers } from '../services/UserService'
 import User from '../interfaces/User'
-import { firestore } from '../firebase'
 
 const UserSelector: React.FC = () => {
     const userContext = useContext(UserContext)
@@ -17,7 +16,7 @@ const UserSelector: React.FC = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const fetchedUsers = await getUsers(firestore)
+            const fetchedUsers = await getUsers()
             setUsers(fetchedUsers)
         }
         fetchUsers()
