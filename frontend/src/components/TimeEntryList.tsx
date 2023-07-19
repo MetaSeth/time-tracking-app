@@ -56,8 +56,6 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
             (acc, entry) => acc + entry.duration,
             0
         )
-        console.log(totalDuration)
-
         return totalDuration
     }
 
@@ -73,8 +71,6 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
     }
 
     const renderUser = (userId: string) => {
-        console.log('admin', currentUser?.admin)
-
         if (currentUser?.admin) {
             const user = users.find((user) => user.id === userId)
 
