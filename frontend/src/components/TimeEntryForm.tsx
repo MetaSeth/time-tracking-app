@@ -1,13 +1,21 @@
-import { Form, Input, Button, DatePicker, InputNumber, Select } from 'antd'
-import { addTimeEntry } from '../services/TimeEntryService'
-import { firestore } from '../firebase'
+import {
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Select,
+    Space,
+} from 'antd'
 import { Timestamp } from 'firebase/firestore'
 import { useContext, useEffect, useState } from 'react'
-import { getTasks } from '../services/TaskService'
-import { getProjects } from '../services/ProjectService'
 import UserContext from '../context/UserContext'
+import { firestore } from '../firebase'
 import Project from '../interfaces/Project'
 import Task from '../interfaces/Task'
+import { getProjects } from '../services/ProjectService'
+import { getTasks } from '../services/TaskService'
+import { addTimeEntry } from '../services/TimeEntryService'
 
 const TimeEntryForm = () => {
     const [form] = Form.useForm()
@@ -17,27 +25,38 @@ const TimeEntryForm = () => {
     const [projects, setProjects] = useState<Project[]>([])
     const projectValue = Form.useWatch('projectId', form)
 
+    const layout = {
+        labelCol: {
+            span: 13,
+            // offset: 15,
+        },
+        wrapperCol: {
+            span: 25,
+            // offset: 15,
+        },
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const fetchedTasks = await getTasks(firestore)
             const fetchedProjects = await getProjects(firestore)
-
             setTasks(fetchedTasks)
             setProjects(fetchedProjects)
         }
         fetchData()
-    }, [firestore, currentUser, tasks, projects])
+    }, [firestore, currentUser])
 
     const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values)
         const formattedValues = {
             ...values,
             date: Timestamp.fromDate(values.date.toDate()),
             userId: currentUser?.id,
         }
-        console.log('formattedValues:', formattedValues)
-
         await addTimeEntry(formattedValues, firestore)
+        form.resetFields()
+    }
+
+    const onReset = () => {
         form.resetFields()
     }
 
@@ -53,7 +72,7 @@ const TimeEntryForm = () => {
     }
 
     return (
-        <Form form={form} onFinish={onFinish} layout="vertical">
+        <Form {...layout} form={form} onFinish={onFinish} layout="vertical">
             <Form.Item
                 label="Project"
                 name="projectId"
@@ -103,9 +122,14 @@ const TimeEntryForm = () => {
             </Form.Item>
 
             <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
+                <Space>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                    <Button htmlType="button" onClick={onReset}>
+                        Reset
+                    </Button>
+                </Space>
             </Form.Item>
         </Form>
     )

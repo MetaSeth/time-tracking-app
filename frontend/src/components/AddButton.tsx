@@ -4,7 +4,7 @@ const AddButton: React.FC = () => {
     return (
         <div>
             <Button type="primary" href="/create">
-                Add
+                New Time Entry
             </Button>
         </div>
     )
