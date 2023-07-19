@@ -1,33 +1,36 @@
 import React from 'react'
-import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import AddButton from './components/AddButton'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import TimeEntryForm from './components/TimeEntryForm'
 import UserSelector from './components/UserSelector'
 import { UserProvider } from './context/UserContext'
+import Home from './pages/Home'
 import ProjectDetails from './pages/ProjectDetails'
 import TaskDetails from './pages/TaskDetails'
-import Home from './pages/Home'
+import CustomHeader from './components/CustomHeader'
 
 const App: React.FC = () => {
     return (
         <UserProvider>
+            <div
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'end',
+                }}
+            >
+                <UserSelector />
+            </div>
             <Router>
-                <div>
-                    <Link to="/">
-                        <h1>Time Tracking App</h1>
-                    </Link>
-                    <UserSelector />
-                    <Routes>
-                        <Route path="/create" element={<TimeEntryForm />} />
-                        <Route path="/" element={<Home />} />
-                        <Route
-                            path="project/:projectId"
-                            element={<ProjectDetails />}
-                        />
-                        <Route path="task/:taskId" element={<TaskDetails />} />
-                    </Routes>
-                    <AddButton />
-                </div>
+                <CustomHeader />
+                <Routes>
+                    <Route path="/create" element={<TimeEntryForm />} />
+                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="project/:projectId"
+                        element={<ProjectDetails />}
+                    />
+                    <Route path="task/:taskId" element={<TaskDetails />} />
+                </Routes>
             </Router>
         </UserProvider>
     )

@@ -1,9 +1,10 @@
+import { Divider } from 'antd'
 import { useContext, useEffect, useState } from 'react'
-import { getTimeEntries } from '../services/TimeEntryService'
+import TimeEntryList from '../components/TimeEntryList'
 import UserContext from '../context/UserContext'
 import { firestore } from '../firebase'
 import TimeEntry from '../interfaces/TimeEntry'
-import TimeEntryList from '../components/TimeEntryList'
+import { getTimeEntries } from '../services/TimeEntryService'
 
 const Home = () => {
     const [timeEntries, setTimeEntries] = useState<TimeEntry[]>([])
@@ -23,8 +24,16 @@ const Home = () => {
     }, [firestore, currentUser])
 
     return (
-        <div>
-            <h1>Home</h1>
+        <div
+            style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+            }}
+        >
+            <Divider orientation="center" />
             <TimeEntryList timeEntries={timeEntries} />
         </div>
     )

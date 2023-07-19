@@ -1,4 +1,4 @@
-import { List, Space, Tag, Typography } from 'antd'
+import { Divider, List, Space, Tag, Typography } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import UserContext from '../context/UserContext'
@@ -10,6 +10,7 @@ import User from '../interfaces/User'
 import { getProjects } from '../services/ProjectService'
 import { getTasks } from '../services/TaskService'
 import { getUsers } from '../services/UserService'
+import AddButton from './AddButton'
 
 const { Text } = Typography
 
@@ -63,7 +64,7 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
     const renderTotalDuration = () => {
         // render only if there are more than one time entry
         if (timeEntries.length > 1) {
-            return <Text>Total duration: {getTotalDuration()}</Text>
+            return <Text>Total duration: {getTotalDuration()} minutes</Text>
         }
     }
 
@@ -93,7 +94,7 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
         const date = timeEntry?.date?.seconds
             ? new Date(timeEntry.date.seconds).toDateString()
             : ''
-        return <>{date}</>
+        return <>Date : {date}</>
     }
 
     const renderTimeEntryDetails = (timeEntry: TimeEntry) => {
@@ -103,8 +104,10 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
                     title={
                         <>
                             <Text>
-                                Date: {renderDate(timeEntry)}, Duration:
-                                {timeEntry.duration}
+                                <Space>
+                                    {renderDate(timeEntry)} Duration:
+                                    {timeEntry.duration} min
+                                </Space>
                             </Text>
                         </>
                     }
@@ -117,7 +120,14 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
     return (
         <>
             <List
-                itemLayout="horizontal"
+                style={{
+                    width: '50%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                }}
+                bordered
+                itemLayout="vertical"
                 dataSource={timeEntries}
                 renderItem={(timeEntry: TimeEntry) => (
                     <List.Item
@@ -131,7 +141,17 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
                     </List.Item>
                 )}
             />
-            {renderTotalDuration()}
+            <Divider>{renderTotalDuration()}</Divider>
+
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'left',
+                    width: '50%',
+                }}
+            >
+                <AddButton />
+            </div>
         </>
     )
 }

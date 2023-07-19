@@ -1,16 +1,15 @@
-import { Typography } from 'antd'
+import { Divider, Typography } from 'antd'
 import 'firebase/firestore'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { firestore } from '../firebase'
 
-import Project from '../interfaces/Project'
-import { getProjectById } from '../services/ProjectService'
-import ProjectEntriesList from './ProjectEntriesList'
 import TimeEntryList from '../components/TimeEntryList'
-import TimeEntry from '../interfaces/TimeEntry'
-import { getTimeEntriesByProject } from '../services/TimeEntryService'
 import UserContext from '../context/UserContext'
+import Project from '../interfaces/Project'
+import TimeEntry from '../interfaces/TimeEntry'
+import { getProjectById } from '../services/ProjectService'
+import { getTimeEntriesByProject } from '../services/TimeEntryService'
 
 const ProjectDetails: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>()
@@ -43,9 +42,18 @@ const ProjectDetails: React.FC = () => {
     }
 
     return (
-        <div>
-            <Typography.Title level={2}>{project.name}</Typography.Title>
-            {/* <ProjectEntriesList project={project} /> */}
+        <div
+            style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+            }}
+        >
+            <Divider orientation="center">
+                <Typography.Title level={2}>{project.name}</Typography.Title>
+            </Divider>
             <TimeEntryList timeEntries={timeEntries} />
         </div>
     )
