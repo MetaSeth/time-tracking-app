@@ -14,7 +14,7 @@ const App: React.FC = () => {
             <div
                 style={{
                     display: 'flex',
-                    width: '100%',
+                    width: '75%',
                     justifyContent: 'end',
                 }}
             >
