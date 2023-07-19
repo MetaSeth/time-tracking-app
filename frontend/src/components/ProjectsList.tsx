@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { List } from 'antd'
 import { Link } from 'react-router-dom'
 import 'firebase/firestore'
-
 import Project from '../interfaces/Project'
-import { firestore } from '../firebase'
 import { collection, getDocs } from 'firebase/firestore'
+import { getFirestoreInstance } from '../firebase'
 
 const ProjectList: React.FC = () => {
     const [projects, setProjects] = useState<Project[]>([])
+    const firestore = getFirestoreInstance()
 
     useEffect(() => {
         const fetchProjects = async () => {

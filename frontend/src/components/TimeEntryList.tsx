@@ -2,7 +2,6 @@ import { Divider, List, Space, Tag, Typography } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import UserContext from '../context/UserContext'
-import { firestore } from '../firebase'
 import Project from '../interfaces/Project'
 import Task from '../interfaces/Task'
 import TimeEntry from '../interfaces/TimeEntry'
@@ -11,8 +10,7 @@ import { getProjects } from '../services/ProjectService'
 import { getTasks } from '../services/TaskService'
 import { getUsers } from '../services/UserService'
 import AddButton from './AddButton'
-
-const { Text } = Typography
+import { getFirestoreInstance } from '../firebase'
 
 interface TimeEntryListProps {
     timeEntries: TimeEntry[]
@@ -26,11 +24,13 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
     const [projects, setProjects] = useState<Project[]>([])
     const [users, setUsers] = useState<User[]>([])
 
+    const firestore = getFirestoreInstance()
+
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedTasks = await getTasks(firestore)
-            const fetchedProjects = await getProjects(firestore)
-            const fetchedUsers = await getUsers(firestore)
+            const fetchedTasks = await getTasks()
+            const fetchedProjects = await getProjects()
+            const fetchedUsers = await getUsers()
 
             setTasks(fetchedTasks)
             setProjects(fetchedProjects)
@@ -45,7 +45,7 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
         return (
             <Link to={`/task/${task?.id}`}>
                 <Space>
-                    <Text>{task?.name}</Text>
+                    <Typography>{task?.name}</Typography>
                 </Space>
             </Link>
         )
@@ -56,25 +56,25 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
             (acc, entry) => acc + entry.duration,
             0
         )
-        console.log(totalDuration)
-
         return totalDuration
     }
 
     const renderTotalDuration = () => {
         // render only if there are more than one time entry
         if (timeEntries.length > 1) {
-            return <Text>Total duration: {getTotalDuration()} minutes</Text>
+            return (
+                <Typography>
+                    Total duration: {getTotalDuration()} minutes
+                </Typography>
+            )
         }
     }
 
     const renderUser = (userId: string) => {
-        console.log('admin', currentUser?.admin)
-
         if (currentUser?.admin) {
             const user = users.find((user) => user.id === userId)
 
-            return <Text>{user?.name}</Text>
+            return <Typography>{user?.name}</Typography>
         }
     }
 
@@ -103,12 +103,12 @@ const TimeEntryList: React.FC<TimeEntryListProps> = ({ timeEntries }) => {
                 <List.Item.Meta
                     title={
                         <>
-                            <Text>
+                            <Typography>
                                 <Space>
                                     {renderDate(timeEntry)} Duration:
                                     {timeEntry.duration} min
                                 </Space>
-                            </Text>
+                            </Typography>
                         </>
                     }
                     description={timeEntry.comment}
