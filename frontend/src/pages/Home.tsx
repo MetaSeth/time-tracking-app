@@ -2,9 +2,8 @@ import { Divider } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import TimeEntryList from '../components/TimeEntryList'
 import UserContext from '../context/UserContext'
-import { firestore } from '../firebase'
 import TimeEntry from '../interfaces/TimeEntry'
-import { getTimeEntries } from '../services/TimeEntryService'
+import { getTimeEntries } from '../services/timeEntryService'
 
 const Home = () => {
     const [timeEntries, setTimeEntries] = useState<TimeEntry[]>([])
@@ -14,14 +13,11 @@ const Home = () => {
     useEffect(() => {
         if (!currentUser) return
         const fetchData = async () => {
-            const fetchedTimeEntries = await getTimeEntries(
-                firestore,
-                currentUser?.id
-            )
+            const fetchedTimeEntries = await getTimeEntries(currentUser?.id)
             setTimeEntries(fetchedTimeEntries)
         }
         fetchData()
-    }, [firestore, currentUser])
+    }, [currentUser])
 
     return (
         <div

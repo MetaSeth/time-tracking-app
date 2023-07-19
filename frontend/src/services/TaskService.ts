@@ -1,29 +1,25 @@
-import { Firestore, query, where } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { getFirestoreInstance } from '../firebase'
 import Task from '../interfaces/Task'
-import { collection, getDocs } from 'firebase/firestore'
 
-export async function getTasks(firestore: Firestore): Promise<Task[]> {
+const firestore = getFirestoreInstance()
+
+export async function getTasks(): Promise<Task[]> {
     const tasksCollection = collection(firestore, 'tasks')
     const tasksSnapshot = await getDocs(tasksCollection)
     return tasksSnapshot.docs.map((doc) => doc.data() as Task)
 }
 
-export async function getTaskById(firestore: Firestore, id: string) {
-    const tasks = await getTasks(firestore)
+export async function getTaskById(id: string) {
+    const tasks = await getTasks()
     return tasks.find((task) => task.id === id)
 }
-export async function getTasksByProject(
-    firestore: Firestore,
-    projectId: string
-): Promise<Task[]> {
-    const tasks = await getTasks(firestore)
+export async function getTasksByProject(projectId: string): Promise<Task[]> {
+    const tasks = await getTasks()
     return tasks.filter((task) => task.projectId === projectId)
 }
 
-export async function getTasksByUser(
-    firestore: Firestore,
-    userId: string
-): Promise<Task[]> {
+export async function getTasksByUser(userId: string): Promise<Task[]> {
     const tasksCollection = collection(firestore, 'tasks')
     const timeEntriesCollection = collection(firestore, 'timeEntries')
 

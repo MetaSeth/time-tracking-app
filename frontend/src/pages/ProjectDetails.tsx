@@ -2,14 +2,13 @@ import { Divider, Typography } from 'antd'
 import 'firebase/firestore'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { firestore } from '../firebase'
 
 import TimeEntryList from '../components/TimeEntryList'
 import UserContext from '../context/UserContext'
 import Project from '../interfaces/Project'
 import TimeEntry from '../interfaces/TimeEntry'
 import { getProjectById } from '../services/ProjectService'
-import { getTimeEntriesByProject } from '../services/TimeEntryService'
+import { getTimeEntriesByProject } from '../services/timeEntryService'
 
 const ProjectDetails: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>()
@@ -21,13 +20,12 @@ const ProjectDetails: React.FC = () => {
     useEffect(() => {
         const fetchProject = async () => {
             if (!projectId) return
-            const fetchedProject = await getProjectById(firestore, projectId)
+            const fetchedProject = await getProjectById(projectId)
             setProject(fetchedProject)
         }
         const fetchTimeEntries = async () => {
             if (!projectId || !currentUser) return
             const fetchedTimeEntries = await getTimeEntriesByProject(
-                firestore,
                 currentUser?.id,
                 projectId
             )
@@ -35,7 +33,7 @@ const ProjectDetails: React.FC = () => {
         }
         fetchProject()
         fetchTimeEntries()
-    }, [firestore, projectId, currentUser])
+    }, [projectId, currentUser])
 
     if (!project) {
         return <div>Loading...</div>
