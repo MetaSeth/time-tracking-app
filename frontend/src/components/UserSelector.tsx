@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Select } from 'antd'
+import { Select, Spin } from 'antd'
 import UserContext from '../context/UserContext'
 import { getUsers } from '../services/UserService'
 import User from '../interfaces/User'
@@ -8,8 +8,7 @@ const UserSelector: React.FC = () => {
     const userContext = useContext(UserContext)
     //if setUser is undefined. Make sure you are wrapping your component with UserContext.Provider
     if (!userContext) {
-        // TODO: add loading spinner
-        return null
+        return <Spin />
     }
     const [users, setUsers] = useState<User[]>([])
     const { setUser, setIsAdmin } = userContext
