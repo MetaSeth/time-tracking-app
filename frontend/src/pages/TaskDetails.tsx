@@ -1,4 +1,4 @@
-import { Divider, Typography } from 'antd'
+import { Divider, Spin, Typography } from 'antd'
 import 'firebase/firestore'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -31,7 +31,7 @@ const TaskDetails: React.FC = () => {
     }, [taskId, currentUser])
 
     if (!task) {
-        return <div>Loading...</div>
+        return <Spin />
     }
 
     return (
